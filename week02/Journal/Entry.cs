@@ -2,37 +2,33 @@ using System;
 
 public class Entry
 {
-    private string _prompt;
-    private string _response;
     private string _date;
+    private string _promptText;
+    private string _entryText;
 
-    // Constructor for new entry, date set automatically
-    public Entry(string prompt, string response)
+    public Entry(string promptText, string entryText)
     {
-        _prompt = prompt;
-        _response = response;
         _date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        _promptText = promptText;
+        _entryText = entryText;
     }
 
-    // Constructor for loading from file (date provided)
-    public Entry(string prompt, string response, string date)
+    public Entry(string promptText, string entryText, string date)
     {
-        _prompt = prompt;
-        _response = response;
+        _promptText = promptText;
+        _entryText = entryText;
         _date = date;
     }
 
-    // Getters
-    public string GetPrompt() => _prompt;
-    public string GetResponse() => _response;
-    public string GetDate() => _date;
-
-    // Display entry nicely
     public void Display()
     {
         Console.WriteLine($"Date: {_date}");
-        Console.WriteLine($"Prompt: {_prompt}");
-        Console.WriteLine($"Response: {_response}");
+        Console.WriteLine($"Prompt: {_promptText}");
+        Console.WriteLine($"Entry: {_entryText}");
         Console.WriteLine();
     }
+
+    public string GetDate() => _date;
+    public string GetPrompt() => _promptText;
+    public string GetEntry() => _entryText;
 }

@@ -4,37 +4,23 @@ using System.IO;
 
 public class Journal
 {
-    private List<Entry> _entries = new List<Entry>();
+    private List<Entry> _entries;
 
-    private List<string> _prompts = new List<string>()
+    public Journal()
     {
-        "What made me smile today?",
-        "What challenge did I overcome recently?",
-        "What am I grateful for right now?",
-        "Who inspired me today and why?",
-        "What is one thing I want to improve about myself?"
-    };
-
-    private Random _random = new Random();
-
-    public void WriteEntry()
-    {
-        string prompt = _prompts[_random.Next(_prompts.Count)];
-        Console.WriteLine($"Prompt: {prompt}");
-        Console.Write("Your response: ");
-        string response = Console.ReadLine();
-
-        Entry newEntry = new Entry(prompt, response);
-        _entries.Add(newEntry);
-
-        Console.WriteLine("Entry saved!\n");
+        _entries = new List<Entry>();
     }
 
-    public void Display()
+    public void AddEntry(Entry newEntry)
+    {
+        _entries.Add(newEntry);
+    }
+
+    public void DisplayAll()
     {
         if (_entries.Count == 0)
         {
-            Console.WriteLine("No entries to display.\n");
+            Console.WriteLine("No journal entries found.\n");
             return;
         }
 
@@ -51,25 +37,26 @@ public class Journal
         {
             foreach (Entry entry in _entries)
             {
+                // Write each field on its own line, then a separator line
                 writer.WriteLine(entry.GetDate());
                 writer.WriteLine(entry.GetPrompt());
-                writer.WriteLine(entry.GetResponse());
-                writer.WriteLine("~|~");  // separator between entries
+                writer.WriteLine(entry.GetEntry());
+                writer.WriteLine("~|~");  // Entry separator
             }
         }
-        Console.WriteLine($"Journal saved to {filename}\n");
+        Console.WriteLine($"Journal saved to file '{filename}'.\n");
     }
 
     public void LoadFromFile(string filename)
     {
         if (!File.Exists(filename))
         {
-            Console.WriteLine("File does not exist.\n");
+            Console.WriteLine($"File '{filename}' does not exist.\n");
             return;
         }
 
-        List<Entry> loadedEntries = new List<Entry>();
         string[] lines = File.ReadAllLines(filename);
+        List<Entry> loadedEntries = new List<Entry>();
 
         for (int i = 0; i < lines.Length; i += 4)
         {
@@ -77,18 +64,18 @@ public class Journal
             {
                 string date = lines[i];
                 string prompt = lines[i + 1];
-                string response = lines[i + 2];
+                string entryText = lines[i + 2];
 
-                loadedEntries.Add(new Entry(prompt, response, date));
+                loadedEntries.Add(new Entry(prompt, entryText, date));
             }
             else
             {
-                Console.WriteLine("File format error.");
+                Console.WriteLine("File format error or incomplete entry found.");
                 break;
             }
         }
 
         _entries = loadedEntries;
-        Console.WriteLine($"Journal loaded from {filename}\n");
+        Console.WriteLine($"Journal loaded from file '{filename}'.\n");
     }
 }

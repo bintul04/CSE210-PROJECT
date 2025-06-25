@@ -4,7 +4,8 @@ class Program
 {
     static void Main(string[] args)
     {
-        Journal myJournal = new Journal();
+        Journal journal = new Journal();
+        PromptGenerator promptGenerator = new PromptGenerator();
         bool quit = false;
 
         while (!quit)
@@ -23,32 +24,37 @@ class Program
             switch (choice)
             {
                 case "1":
-                    myJournal.WriteEntry();
+                    string prompt = promptGenerator.GetRandomPrompt();
+                    Console.WriteLine($"Prompt: {prompt}");
+                    Console.Write("Your response: ");
+                    string response = Console.ReadLine();
+                    journal.AddEntry(new Entry(prompt, response));
+                    Console.WriteLine("Entry added!\n");
                     break;
 
                 case "2":
-                    myJournal.Display();
+                    journal.DisplayAll();
                     break;
 
                 case "3":
-                    Console.Write("Enter filename to save: ");
+                    Console.Write("Enter filename to save to: ");
                     string saveFile = Console.ReadLine();
-                    myJournal.SaveToFile(saveFile);
+                    journal.SaveToFile(saveFile);
                     break;
 
                 case "4":
-                    Console.Write("Enter filename to load: ");
+                    Console.Write("Enter filename to load from: ");
                     string loadFile = Console.ReadLine();
-                    myJournal.LoadFromFile(loadFile);
+                    journal.LoadFromFile(loadFile);
                     break;
 
                 case "5":
                     quit = true;
-                    Console.WriteLine("Goodbye!");
+                    Console.WriteLine("Goodbye, mi amor! Keep journaling ❤️");
                     break;
 
                 default:
-                    Console.WriteLine("Invalid choice. Please choose 1-5.\n");
+                    Console.WriteLine("Invalid option. Please enter a number 1-5.\n");
                     break;
             }
         }
